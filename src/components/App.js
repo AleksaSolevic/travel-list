@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "./Logo";
 import Form from "./Form";
 import PackingList from "./PackingList";
@@ -6,7 +6,14 @@ import Stats from "./Stats";
 
 export default function App() {
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    const storedItems = localStorage.getItem("tripItems");
+    return storedItems ? JSON.parse(storedItems) : [];
+  });
+ 
+  useEffect(() => {
+    localStorage.setItem("tripItems", JSON.stringify(items));
+  }, [items]);
 
   function handleAddItems(item) {
     setItems((items) => [...items, item]);
